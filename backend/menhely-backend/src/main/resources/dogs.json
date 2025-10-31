@@ -1,0 +1,12 @@
+[
+  { "id": 1, "name": "Matyi", "breed": "Dachshund" },
+  { "id": 2, "name": "Morzsi", "breed": "Vizsla" },
+  { "id": 3, "name": "Cézár", "breed": "Kuvass" },
+  { "id": 4, "name": "Buksi", "breed": "Mudi" },
+  { "id": 5, "name": "Picur", "breed": "Labrador Retriever" },
+  { "id": 6, "name": "Fickó", "breed": "Beagle" },
+  { "id": 7, "name": "Folti", "breed": "Dalmata" },
+  { "id": 8, "name": "Mackó", "breed": "Bernese Mountain Dog" },
+  { "id": 9, "name": "Zsömle", "breed": "Cocker Spaniel" },
+  { "id": 10, "name": "Vacak", "breed": "Border Collie" }
+]

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 // @Component > Spring automatikusan legyártja a classt amikor meghívja egy másik
 @Component
@@ -25,5 +26,11 @@ public class DogLoader {
 
     public List<Dog> getDogs() {
         return dogs;
+    }
+
+    public Optional<Dog> findById(int id) {
+        return dogs.stream()
+                .filter(d -> d.getId() == id)
+                .findFirst();
     }
 }

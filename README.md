@@ -10,3 +10,10 @@
 
 ## Endpoint:
 GET /dogs >>> src/main/resources/dogs.json
+GET /dogs/{x} 
+
+GET /staff >>> src/main/resources/staff.json
+GET /staff/{x}
+
+GET /adopters >>> src/main/resources/adopters.json
+GET /adopters/{x}

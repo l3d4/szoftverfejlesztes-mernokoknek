@@ -21,6 +21,14 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 
 ## Project Setup
 
+Open terminal in the IDE.
+Change directory as follows.
+
+```sh
+cd frontend
+```
+### To install the VUE project and its dependencies run
+
 ```sh
 npm install
 ```

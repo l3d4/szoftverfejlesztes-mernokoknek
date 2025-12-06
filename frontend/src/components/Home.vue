@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <h1 class="greetings">
-    Üdvözöllek az UNIDEB Kutyamenhelyén
+    {{ msg }}
   </h1>
 </template>
 
@@ -18,7 +18,7 @@ defineProps({
 .greetings {
   font-weight: bolder;
   float: left;
-  padding: 3rem;
+  padding: 1.4rem;
 }
 
 </style>

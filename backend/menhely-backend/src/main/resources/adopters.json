@@ -1,4 +1,5 @@
 [
   { "id": 1, "firstName": "Eva", "lastName": "Nagy", "email": "eva@example.com", "phone": "+36-30-333-3333" },
-  { "id": 2, "firstName": "Peter", "lastName": "Toth", "email": "peter@example.com", "phone": "+36-30-444-4444" }
+  { "id": 2, "firstName": "Peter", "lastName": "Toth", "email": "peter@example.com", "phone": "+36-30-444-4444" },
+  { "id": 3, "firstName": "Róbert", "lastName": "Spongya", "email": "spongyabob@example.com", "phone": "+36-70-888-9999" }
 ]

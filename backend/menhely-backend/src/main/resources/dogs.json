@@ -1,7 +1,7 @@
 [
   { "id": 1, "name": "Matyi", "breed": "Dachshund" },
   { "id": 2, "name": "Morzsi", "breed": "Vizsla" },
-  { "id": 3, "name": "Cézár", "breed": "Kuvass" },
+  { "id": 3, "name": "Cézár", "breed": "Kuvasz" },
   { "id": 4, "name": "Buksi", "breed": "Mudi" },
   { "id": 5, "name": "Picur", "breed": "Labrador Retriever" },
   { "id": 6, "name": "Fickó", "breed": "Beagle" },

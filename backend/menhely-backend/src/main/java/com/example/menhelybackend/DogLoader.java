@@ -33,4 +33,20 @@ public class DogLoader {
                 .filter(d -> d.getId() == id)
                 .findFirst();
     }
+
+    public void save() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+
+            String path = getClass().getResource("/dogs.json").getPath();
+
+
+            mapper.writeValue(new java.io.File(path), this.dogs);
+
+            System.out.println("Sikeresen mentve a fájlba: " + path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Nem sikerült menteni a fájlba.", e);
+        }
+    }
 }

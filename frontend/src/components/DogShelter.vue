@@ -145,6 +145,13 @@ export default {
         <label>{{ selectedColumns[colKey] }}</label>
         <input class="fill" type="text" v-model="selectedRow[colKey]" v-bind:readonly="colKey === 'id'"/>
       </div>
+
+        <!--
+        kutya képek
+        + kutya képek + kutya képeket bemásolni a src/assets/img mappába
+        <img v-bind:src="'../assets/img/' + selectedRow.name + '.jpg'">
+        -->
+
       <div v-if="selectedModel === 'Dogs'" style="margin-top: 1rem; text-align: right;">
         <button @click="updateDog" class="action-btn">Submit</button>
       </div>

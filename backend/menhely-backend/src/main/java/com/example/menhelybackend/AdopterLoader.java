@@ -29,4 +29,18 @@ public class AdopterLoader {
     public Optional<Adopter> findById(int id) {
         return adopters.stream().filter(a -> a.getId() == id).findFirst();
     }
+
+
+    public void save() {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            String path = getClass().getResource("/adopters.json").getPath();
+            mapper.writeValue(new java.io.File(path), this.adopters);
+            System.out.println("Saved adopters list to: " + path);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to save adopters.json", e);
+        }
+    }
 }

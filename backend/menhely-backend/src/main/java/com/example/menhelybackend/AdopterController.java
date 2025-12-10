@@ -28,4 +28,27 @@ public class AdopterController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+
+    @PutMapping("/adopters/{id}")
+    public ResponseEntity<Adopter> updateAdopter(
+            @PathVariable int id,
+            @RequestBody Adopter details
+    ) {
+        Optional<Adopter> optional = adopterLoader.findById(id);
+
+        if (optional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Adopter adopter = optional.get();
+
+        adopter.setName(details.getName());
+        adopter.setPhone(details.getPhone());
+        adopter.setPreferredDog(details.getPreferredDog());
+
+        adopterLoader.save();  // JSON mentése
+
+        return ResponseEntity.ok(adopter);
+    }
 }

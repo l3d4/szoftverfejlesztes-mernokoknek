@@ -72,6 +72,18 @@ export default {
       this.selectedRow = item;
     },
 
+    async updateDog() {
+      if (this.selectedModel !== 'Dogs' || !this.selectedRow) return;
+
+      try {
+        await axios.put("http://localhost:8080/dogs/" + this.selectedRow.id, this.selectedRow);
+        alert("Sikeres mentés!");
+      } catch (error) {
+        console.error("Hiba:", error);
+        alert("Sikertelen mentés.");
+      }
+    },
+
     login() {
       this.getMessage();
       this.loggingIn = false;
@@ -132,6 +144,9 @@ export default {
       <div v-for="colKey in Object.keys(selectedColumns)" class="data-field fill">
         <label>{{ selectedColumns[colKey] }}</label>
         <input class="fill" type="text" v-model="selectedRow[colKey]" v-bind:readonly="colKey === 'id'"/>
+      </div>
+      <div v-if="selectedModel === 'Dogs'" style="margin-top: 1rem; text-align: right;">
+        <button @click="updateDog" class="action-btn">Submit</button>
       </div>
       </div>
     </div>
@@ -224,6 +239,7 @@ td {
   background: rgba(155,175,210,.6);
   width: 440px;
   padding: 2rem;
+  overflow-y: auto;
 }
 
 .selected-context {
@@ -242,4 +258,17 @@ td {
   width: 8rem;
 }
 
+.action-btn {
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.action-btn:hover {
+  background-color: #3e5871;
+}
 </style>

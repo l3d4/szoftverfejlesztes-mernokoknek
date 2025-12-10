@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.Optional;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -20,6 +23,21 @@ public class DogController {
     @GetMapping("/dogs")
     public List<Dog> getAllDogs() {
         return dogLoader.getDogs();
+    }
+
+    @PutMapping("/dogs/{id}")
+    public ResponseEntity<Dog> updateDog(@PathVariable int id, @RequestBody Dog dogDetails) {
+        Optional<Dog> optionalDog = dogLoader.findById(id);
+
+        if (optionalDog.isPresent()) {
+            Dog dog = optionalDog.get();
+            dog.setName(dogDetails.getName());
+            dog.setBreed(dogDetails.getBreed());
+            dogLoader.save();
+            return ResponseEntity.ok(dog);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/dogs/{id}")

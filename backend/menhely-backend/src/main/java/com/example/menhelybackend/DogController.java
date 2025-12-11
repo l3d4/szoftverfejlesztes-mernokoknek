@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -45,5 +46,11 @@ public class DogController {
         return dogLoader.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/dogs")
+    public ResponseEntity<Dog> createDog(@RequestBody Dog dogDetails) {
+        Dog createdDog = dogLoader.addDog(dogDetails);
+        return ResponseEntity.ok(createdDog);
     }
 }

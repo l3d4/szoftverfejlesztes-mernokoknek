@@ -26,7 +26,23 @@ public class StaffLoader {
         return staff;
     }
 
+    public List<Staff> getStaff() {
+        return this.staff;
+    }
+
     public Optional<Staff> findById(int id) {
         return staff.stream().filter(s -> s.getId() == id).findFirst();
+    }
+
+    public void save() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+
+            String path = getClass().getResource("/staff.json").getPath();
+
+            mapper.writeValue(new java.io.File(path), this.staff);
+        } catch (IOException e) {
+            throw new RuntimeException("Nem sikerült menteni a staff.json fájlba", e);
+        }
     }
 }

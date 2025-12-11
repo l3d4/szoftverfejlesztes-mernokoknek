@@ -1,14 +1,9 @@
 package com.example.menhelybackend;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.Optional;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -52,5 +47,20 @@ public class DogController {
     public ResponseEntity<Dog> createDog(@RequestBody Dog dogDetails) {
         Dog createdDog = dogLoader.addDog(dogDetails);
         return ResponseEntity.ok(createdDog);
+    }
+
+    @DeleteMapping("/dogs/{id}")
+    public ResponseEntity<Void> deleteDog(@PathVariable int id) {
+        List<Dog> list = dogLoader.getDogs();
+
+
+        boolean removed = list.removeIf(dog -> dog.getId() == id);
+
+        if (removed) {
+            dogLoader.save();
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

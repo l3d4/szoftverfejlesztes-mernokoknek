@@ -25,19 +25,91 @@ export default {
 
   async mounted() {
     this.selectedModel = 'Dashboard';
-    let dogsResponse = await axios.get("http://localhost:8080/dogs");
-    this.dogList = dogsResponse.data;
-
-    let staffResponse = await axios.get("http://localhost:8080/staff");
-    this.staffList = staffResponse.data;
-
-    let adopterResponse = await axios.get("http://localhost:8080/adopters");
-    this.adopterList = adopterResponse.data;
     this.loggingIn = false;
     this.userName = 'Látogató';
+
+
+    await this.loadData();
   },
 
   methods: {
+
+    async loadData() {
+      try {
+        console.log("Adatok betöltése...");
+        let dogsResponse = await axios.get("http://localhost:8080/dogs");
+        this.dogList = dogsResponse.data;
+
+        let staffResponse = await axios.get("http://localhost:8080/staff");
+        this.staffList = staffResponse.data;
+
+        let adopterResponse = await axios.get("http://localhost:8080/adopters");
+        this.adopterList = adopterResponse.data;
+
+
+        if (this.selectedModel !== 'Dashboard') {
+          this.selectContext(this.selectedModel);
+        }
+      } catch (error) {
+        console.error("Hiba az adatok betöltésekor:", error);
+      }
+    },
+
+    createItem() {
+      this.selectedRow = {};
+    },
+
+    async saveItem() {
+      if (!this.selectedModel || this.selectedModel === 'Dashboard') return;
+
+      let endpoint = "/" + this.selectedModel.toLowerCase();
+      let baseUrl = "http://localhost:8080";
+
+      try {
+        if (this.selectedRow.id) {
+
+          await axios.put(baseUrl + endpoint + "/" + this.selectedRow.id, this.selectedRow);
+          alert("Sikeres módosítás!");
+        } else {
+          // Új létrehozása (POST)
+          await axios.post(baseUrl + endpoint, this.selectedRow);
+          alert("Sikeresen hozzáadva!");
+          this.selectedRow = {};
+        }
+
+
+        await this.loadData();
+
+      } catch (error) {
+        console.error("Hiba a mentéskor:", error);
+        alert("Hiba történt a mentéskor!");
+      }
+    },
+
+    async deleteItem() {
+
+      if (!confirm("Biztosan törölni szeretnéd ezt az elemet?")) return;
+
+      if (!this.selectedRow.id) return;
+
+      let endpoint = "/" + this.selectedModel.toLowerCase();
+      let baseUrl = "http://localhost:8080";
+
+      try {
+        await axios.delete(baseUrl + endpoint + "/" + this.selectedRow.id);
+
+        alert("Sikeres törlés!");
+
+        this.selectedRow = null;
+        await this.loadData();
+
+      } catch (error) {
+        console.error("Hiba törléskor:", error);
+        alert("Nem sikerült a törlés.");
+      }
+    },
+
+
     selectContext(context) {
       this.selectedModel = context;
       switch (this.selectedModel) {
@@ -64,56 +136,12 @@ export default {
       }
     },
 
-      createEmptyDog() {
-        this.selectContext('Dogs');
-
-
-      this.selectedRow = {
-        id: null,
-        name: '',
-        breed: ''
-      };
-    },
-
     getMessage() {
       return "Kedves " + this.userName  + " Üdvözöllek az UNIDEB Kutyamenhely weboldalán!";
     },
 
     selectRow(item) {
       this.selectedRow = item;
-    },
-
-    async updateDog() {
-      if (this.selectedModel !== 'Dogs' || !this.selectedRow) return;
-
-      try {
-        if (this.selectedRow.id) {
-          // existing dog -> update
-          await axios.put(
-              "http://localhost:8080/dogs/" + this.selectedRow.id,
-              this.selectedRow
-          );
-        } else {
-          // new dog -> create
-          const response = await axios.post(
-              "http://localhost:8080/dogs",
-              this.selectedRow
-          );
-
-          const createdDog = response.data;
-
-          // add to list so it appears in the table
-          this.dogList.push(createdDog);
-
-          // and select it (so the form now shows it with real id)
-          this.selectedRow = createdDog;
-        }
-
-        alert("Sikeres mentés!");
-      } catch (error) {
-        console.error("Hiba:", error);
-        alert("Sikertelen mentés.");
-      }
     },
 
     login() {
@@ -167,32 +195,37 @@ export default {
       </div>
     </div>
     <div class="details-panel lefty">
+
       <div v-if="loggingIn">
         <p>Hogy szólíthatlak?</p>
         <input type="text" v-model="userName">
         <button v-on:click="login()">login</button>
       </div>
-      <div v-if="selectedRow !== null">
-      <h1 v-if="selectedRow.hasOwnProperty('name')">{{ selectedRow.name }}</h1>
-      <h1 v-if="selectedRow.hasOwnProperty('firstName') &&
-                selectedRow.hasOwnProperty('lastName')">
-        {{ selectedRow.lastName }} {{ selectedRow.firstName }}
-      </h1>
-      <div v-for="colKey in Object.keys(selectedColumns)" class="data-field fill">
-        <label>{{ selectedColumns[colKey] }}</label>
-        <input class="fill" type="text" v-model="selectedRow[colKey]" v-bind:readonly="colKey === 'id'"/>
+
+      <div v-if="selectedModel !== 'Dashboard' && !loggingIn" style="margin-bottom: 1rem; text-align: center;">
+
+        <button @click="createItem" class="action-btn" style="background: #27ae60; margin-right: 10px;">+ Új felvétele</button>
+
+        <button v-if="selectedRow && selectedRow.id" @click="deleteItem" class="action-btn delete-btn">Törlés</button>
+
       </div>
 
-        <!--
-        kutya képek
-        + kutya képek + kutya képeket bemásolni a src/assets/img mappába
-        <img v-bind:src="'../assets/img/' + selectedRow.name + '.jpg'">
-        -->
+      <div v-if="selectedRow !== null && !loggingIn && selectedModel !== 'Dashboard'">
 
-      <div v-if="selectedModel === 'Dogs'" style="margin-top: 1rem; text-align: right;">
-        <button @click="updateDog" class="action-btn">Submit</button>
+        <h1 v-if="selectedRow.name">{{ selectedRow.name }}</h1>
+        <h1 v-if="selectedRow.firstName">{{ selectedRow.lastName }} {{ selectedRow.firstName }}</h1>
+
+        <div v-for="colKey in Object.keys(selectedColumns)" class="data-field fill">
+          <label>{{ selectedColumns[colKey] }}</label>
+          <input class="fill" type="text" v-model="selectedRow[colKey]" v-bind:readonly="colKey === 'id'"/>
+        </div>
+
+        <div style="margin-top: 1rem; text-align: right;">
+          <button @click="saveItem" class="action-btn">Adatok Mentése</button>
+        </div>
+
       </div>
-      </div>
+
     </div>
   </div>
 </template>
@@ -314,5 +347,14 @@ td {
 
 .action-btn:hover {
   background-color: #3e5871;
+}
+
+.delete-btn {
+  background-color: #e74c3c !important; /* Piros szín */
+  margin-right: 10px; /* Távolság a mentés gombtól */
+}
+
+.delete-btn:hover {
+  background-color: #c0392b !important; /* Sötétebb piros ha ráviszed az egeret */
 }
 </style>

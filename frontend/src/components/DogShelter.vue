@@ -64,8 +64,9 @@ export default {
       }
     },
 
-    createEmptyDog() {
-      this.selectContext('Dogs');
+      createEmptyDog() {
+        this.selectContext('Dogs');
+
 
       this.selectedRow = {
         id: null,

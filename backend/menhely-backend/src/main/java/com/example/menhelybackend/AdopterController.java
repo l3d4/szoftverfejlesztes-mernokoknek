@@ -6,6 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.Optional;
+
 import java.util.List;
 
 @RestController
@@ -43,9 +48,9 @@ public class AdopterController {
 
         Adopter adopter = optional.get();
 
-        adopter.setName(details.getName());
+        // adopter.setName(details.getName());
         adopter.setPhone(details.getPhone());
-        adopter.setPreferredDog(details.getPreferredDog());
+        // adopter.setPreferredDog(details.getPreferredDog());
 
         adopterLoader.save();  // JSON mentése
 

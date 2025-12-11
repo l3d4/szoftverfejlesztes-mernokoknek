@@ -51,16 +51,15 @@ public class DogLoader {
     }
 
     public Dog addDog(Dog newDog) {
-        // find next free id: max(id) + 1
         int newId = dogs.stream()
                 .mapToInt(Dog::getId)
                 .max()
                 .orElse(0) + 1;
 
-        newDog.setId(newId);  // assign new id
-        dogs.add(newDog);     // add to list in memory
+        newDog.setId(newId);
+        dogs.add(newDog);
 
-        save();               // write list back to dogs.json
+        save();
 
         return newDog;
     }

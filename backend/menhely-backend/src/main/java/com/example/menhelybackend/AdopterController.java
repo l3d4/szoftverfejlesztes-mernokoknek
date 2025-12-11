@@ -1,10 +1,7 @@
 package com.example.menhelybackend;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.Optional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -55,5 +53,32 @@ public class AdopterController {
         adopterLoader.save();  // JSON mentése
 
         return ResponseEntity.ok(adopter);
+    }
+
+    @PostMapping("/adopters")
+    public ResponseEntity<Adopter> addAdopter(@RequestBody Adopter newAdopter) {
+        List<Adopter> list = adopterLoader.getAdopters();
+
+        int newId = list.stream().mapToInt(Adopter::getId).max().orElse(0) + 1;
+        newAdopter.setId(newId);
+
+        list.add(newAdopter);
+        adopterLoader.save();
+
+        return ResponseEntity.ok(newAdopter);
+    }
+
+    @DeleteMapping("/adopters/{id}")
+    public ResponseEntity<Void> deleteAdopter(@PathVariable int id) {
+        List<Adopter> list = adopterLoader.getAdopters();
+
+        boolean removed = list.removeIf(adopter -> adopter.getId() == id);
+
+        if (removed) {
+            adopterLoader.save();
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

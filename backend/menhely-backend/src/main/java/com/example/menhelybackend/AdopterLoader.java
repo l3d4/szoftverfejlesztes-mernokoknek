@@ -26,6 +26,10 @@ public class AdopterLoader {
         return adopters;
     }
 
+    public List<Adopter> getAdopters() {
+        return this.adopters;
+    }
+
     public Optional<Adopter> findById(int id) {
         return adopters.stream().filter(a -> a.getId() == id).findFirst();
     }

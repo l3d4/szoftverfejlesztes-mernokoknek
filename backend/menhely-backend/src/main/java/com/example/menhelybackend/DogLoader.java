@@ -49,4 +49,19 @@ public class DogLoader {
             throw new RuntimeException("Nem sikerült menteni a fájlba.", e);
         }
     }
+
+    public Dog addDog(Dog newDog) {
+        int newId = dogs.stream()
+                .mapToInt(Dog::getId)
+                .max()
+                .orElse(0) + 1;
+
+        newDog.setId(newId);
+        dogs.add(newDog);
+
+        save();
+
+        return newDog;
+    }
+
 }

@@ -64,6 +64,16 @@ export default {
       }
     },
 
+    createEmptyDog() {
+      this.selectContext('Dogs');
+
+      this.selectedRow = {
+        id: null,
+        name: '',
+        breed: ''
+      };
+    },
+
     getMessage() {
       return "Kedves " + this.userName  + " Üdvözöllek az UNIDEB Kutyamenhely weboldalán!";
     },
@@ -76,7 +86,28 @@ export default {
       if (this.selectedModel !== 'Dogs' || !this.selectedRow) return;
 
       try {
-        await axios.put("http://localhost:8080/dogs/" + this.selectedRow.id, this.selectedRow);
+        if (this.selectedRow.id) {
+          // existing dog -> update
+          await axios.put(
+              "http://localhost:8080/dogs/" + this.selectedRow.id,
+              this.selectedRow
+          );
+        } else {
+          // new dog -> create
+          const response = await axios.post(
+              "http://localhost:8080/dogs",
+              this.selectedRow
+          );
+
+          const createdDog = response.data;
+
+          // add to list so it appears in the table
+          this.dogList.push(createdDog);
+
+          // and select it (so the form now shows it with real id)
+          this.selectedRow = createdDog;
+        }
+
         alert("Sikeres mentés!");
       } catch (error) {
         console.error("Hiba:", error);
@@ -110,6 +141,11 @@ export default {
       <div v-for="item of contextList" class="menu-item" @click.left="selectContext(item)" v-bind:class="selectedModel === item ? 'selected-context' : ''">{{ item }}</div>
     </div>
     <div class="data-table lefty">
+
+      <div v-if="selectedModel === 'Dogs'" style="margin-bottom: 0.5rem; text-align: right;">
+        <button @click="createEmptyDog" class="action-btn">Új kutya</button>
+      </div>
+
       <table v-if="selectedList !== null" >
         <tbody>
           <tr>

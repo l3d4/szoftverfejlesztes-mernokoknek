@@ -171,10 +171,6 @@ export default {
     </div>
     <div class="data-table lefty">
 
-      <div v-if="selectedModel === 'Dogs'" style="margin-bottom: 0.5rem; text-align: right;">
-        <button @click="createEmptyDog" class="action-btn">Új kutya</button>
-      </div>
-
       <table v-if="selectedList !== null" >
         <tbody>
           <tr>
@@ -183,8 +179,11 @@ export default {
           </tr>
           <tr v-for="row in selectedList" @click.left="selectRow(row)" class="row-action">
             <td v-for="colKey in Object.keys(selectedColumns)">{{ row[colKey] }}</td>
-            <td style="cursor: pointer" v-bind:class="[selectedRow !== null && row.id === selectedRow.id ? 'selected-row' : '']">
-              --&gt
+            <td style="background-color: white; padding: 0;">
+              <div style="padding: 1rem; cursor: pointer; height: 100%; display: flex; align-items: center;"
+                   v-bind:class="[selectedRow !== null && row.id === selectedRow.id ? 'selected-row' : '']">
+                --&gt
+              </div>
             </td>
           </tr>
         </tbody>

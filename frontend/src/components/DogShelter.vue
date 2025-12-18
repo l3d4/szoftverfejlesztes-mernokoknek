@@ -224,6 +224,10 @@ export default {
           <button @click="saveItem" class="action-btn">Adatok Mentése</button>
         </div>
 
+        <div v-if="selectedModel == 'Dogs'">
+            <img class="pick" v-bind:src="'src/assets/img/' + selectedRow.id + '.jpg'" >
+        </div>
+
       </div>
 
     </div>
@@ -357,4 +361,13 @@ td {
 .delete-btn:hover {
   background-color: #c0392b !important; /* Sötétebb piros ha ráviszed az egeret */
 }
+
+
+.pick{
+    max-width: 300px;
+    min-width: 300px;
+    margin: 10px;
+ }
+
+
 </style>
